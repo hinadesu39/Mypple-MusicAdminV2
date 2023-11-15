@@ -10,7 +10,7 @@
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         Background="{DynamicResource MaterialDesignPaper}"
-        WindowStartupLocation="CenterScreen"
+        
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Title="Mypple Music后台管理V2"
         FontFamily="微软雅黑"

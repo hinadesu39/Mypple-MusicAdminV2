@@ -11,7 +11,7 @@ namespace Mypple_MusicAdminV2.Service
        Uri? MusicPicUrl,
        Uri? AlbumPicUrl,
        Uri? ArtistPicUrl,
-       MultilingualString Title,
+       string Title,
        double Duration,
        string Artist,
        string Album,

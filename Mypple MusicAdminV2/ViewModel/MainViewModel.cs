@@ -1,4 +1,5 @@
-﻿using MusicAdminV2.Model;
+﻿using ImTools;
+using MusicAdminV2.Model;
 using Mypple_MusicAdminV2.Event;
 using Mypple_MusicAdminV2.Extension;
 using Mypple_MusicAdminV2.Model;
@@ -17,6 +18,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Mypple_MusicAdminV2.ViewModel
 {
@@ -139,7 +142,7 @@ namespace Mypple_MusicAdminV2.ViewModel
                             music.PicUrl,
                             music.PicUrl,
                             music.PicUrl,
-                            new MultilingualString(music.Title, ""),
+                            music.Title,
                             music.Duration,
                             music.Artist,
                             music.Album,
@@ -178,7 +181,7 @@ namespace Mypple_MusicAdminV2.ViewModel
                             music.PicUrl,
                             music.PicUrl,
                             music.PicUrl,
-                            new MultilingualString(music.Title, ""),
+                            music.Title,
                             music.Duration,
                             music.Artist,
                             music.Album,
@@ -226,9 +229,30 @@ namespace Mypple_MusicAdminV2.ViewModel
                     if (music.Tag.Pictures != null && music.Tag.Pictures.Length != 0)
                     {
                         var bin = music.Tag.Pictures[0].Data.Data;
+
+                        using MemoryStream stream = new MemoryStream(bin);
+
+                        BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.StreamSource = stream;
+                        bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.EndInit();
+                        bitmapImage.Freeze();
                         //将 bin 保存为一个文件上传完成后自动删除
-                        File.WriteAllBytes($@"temp/{musicToAdd.Title.Replace('/', '-')}.jpg", bin);
+                        //File.WriteAllBytes($@"temp/{musicToAdd.Title.Replace('/', '-')}.jpg", bin);
                         string absolute = Path.GetFullPath($@"temp/{musicToAdd.Title.Replace('/', '-')}.jpg");
+                       
+                        if (!File.Exists(absolute))
+                        {
+                            File.Create(absolute);
+                        }
+                        JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                        using (FileStream fileStream = new FileStream(absolute, FileMode.Create))
+                        {
+                            encoder.Save(fileStream);
+                        }
                         musicToAdd.LocalPicUrl = absolute;
                     }
                     MusicList.Add(musicToAdd);
