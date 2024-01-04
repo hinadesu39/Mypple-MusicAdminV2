@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="新文件夹\**" />
+    <EmbeddedResource Remove="新文件夹\**" />
+    <None Remove="新文件夹\**" />
+    <Page Remove="新文件夹\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resource\iconfont.ttf" />
   </ItemGroup>
 
@@ -22,10 +29,6 @@
 
   <ItemGroup>
     <Resource Include="Resource\iconfont.ttf" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="新文件夹\" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Mypple_MusicAdminV2.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +22,15 @@ namespace Mypple_MusicAdminV2.Service
             request.Route = $"/FileService/api/Uploader/Upload";
             request.Parameter = url;
             var res = await client.UploadAsync(request);
+            return res;
+        }
+
+        public async Task<FileExistsResponse> FileExists(long fileSize, string sha256Hash)
+        {
+            BaseRequest request = new BaseRequest();
+            request.Method = RestSharp.Method.Get;
+            request.Route = $"/FileService/api/Uploader/FileExists?fileSize={fileSize}&sha256Hash={sha256Hash}";
+            var res = await client.ExecuteAsync<FileExistsResponse>(request);
             return res;
         }
     }

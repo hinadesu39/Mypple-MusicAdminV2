@@ -7,6 +7,7 @@
         xmlns:model="clr-namespace:MusicAdminV2.Model"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -113,7 +114,7 @@
                         </Grid>
                     </Border>
                     <Image x:Name="musicImg"
-                           Source="{Binding SelectedMusic.LocalPicUrl}"
+                           Source="{Binding BitmapImage}"
                            d:Source="C:\Users\Hinadesu\Desktop\projects\Mypple Music\Mypple Music\Resource\postShelter.png"
                            Width="180"
                            Height="180"
@@ -165,6 +166,11 @@
                           Height="{Binding RelativeSource={RelativeSource AncestorType=Grid},Path=ActualHeight}"
                           CellStyle="{StaticResource DataGridCellStyle}"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <d:DataGrid.Items>
                         <model:Music Album="111"
                                      Artist="111"
