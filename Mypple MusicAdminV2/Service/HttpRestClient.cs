@@ -2,6 +2,7 @@
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,7 @@ namespace Mypple_MusicAdminV2.Service
             var url = new Uri(apiUrl + baseRequest.Route);
             var request = new RestRequest(url, baseRequest.Method);
             request.AddHeader("Content-Type", baseRequest.ContentType);
+            request.AddHeader("Authorization", $"Bearer {AppSession.JwtToken}");
             if (baseRequest.Parameter != null)
             {
                 string body = JsonConvert.SerializeObject(baseRequest.Parameter);

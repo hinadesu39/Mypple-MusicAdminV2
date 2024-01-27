@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MusicAdminV2.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Mypple_MusicAdminV2.Service
 {
-    public class MusicAdminService : BaseService
+    public class MusicAdminService : BaseService<Music>
     {
         private readonly HttpRestClient client;
 
-        public MusicAdminService(HttpRestClient client) : base(client, "/Music.Admin")
+        public MusicAdminService(HttpRestClient client) : base(client, "/Music.Admin/api/Musics")
         {
             this.client = client;
         }
@@ -24,5 +25,7 @@ namespace Mypple_MusicAdminV2.Service
             var res = await client.ExecuteAsync<Guid>(request);
             return res;
         }
+
+
     }
 }

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Mypple_MusicAdminV2.Service
 {
-    public class UploaderService : BaseService
+    public class UploaderService 
     {
         private readonly HttpRestClient client;
-        public UploaderService(HttpRestClient client) : base(client, "/FileService")
+        public UploaderService(HttpRestClient client)
         {
             this.client = client;
         }

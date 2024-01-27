@@ -11,13 +11,20 @@
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         Background="{DynamicResource MaterialDesignPaper}"
-        
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Title="Mypple Music后台管理V2"
         FontFamily="微软雅黑"
         FontWeight="Bold"
         Height="980"
         Width="1560">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding InitCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <d:Window.DataContext>
+        <local:MainViewModel />
+    </d:Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -27,236 +34,42 @@
         <StackPanel>
             <md:Card>
                 <Menu md:MenuAssist.TopLevelMenuItemHeight="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type md:Card}}, Path=ActualHeight}">
-                    <MenuItem Header="File">
-                        <MenuItem Header="Item 1" />
-                        <MenuItem Header="Item 2" />
-                        <MenuItem Header="Item 3" />
-                    </MenuItem>
-                    <MenuItem Header="Edit">
-                        <MenuItem Header="Item 1" />
-                        <MenuItem Header="Item 2" />
-                        <MenuItem Header="Item 3" />
-                    </MenuItem>
-                    <MenuItem Header="About" />
+                    <MenuItem Header="歌曲上传"
+                              Tag="MusicUploadView"
+                              Command="{Binding NavigateCommand}"
+                              CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}" />
+                    <MenuItem Header="歌曲管理"
+                              Tag="MusicManageView"
+                              Command="{Binding NavigateCommand}"
+                              CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}" />
+                    <MenuItem Header="专辑管理"
+                              Tag="AlbumManageView"
+                              Command="{Binding NavigateCommand}"
+                              CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}" />
+                    <MenuItem Header="艺人管理"
+                              Tag="ArtistManageView"
+                              Command="{Binding NavigateCommand}"
+                              CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}" />
+                    <MenuItem Header="用户管理"
+                              Tag="UserManageView"
+                              Command="{Binding NavigateCommand}"
+                              CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}" />
                 </Menu>
             </md:Card>
         </StackPanel>
         <!--#endregion-->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300" />
-                <ColumnDefinition />
 
-            </Grid.ColumnDefinitions>
-            <Border  BorderThickness="0,0,1,0"
-                     BorderBrush="#33000000" />
+        <md:DialogHost DialogTheme="Inherit"
+                       Identifier="Root"
+                       x:Name="DialogHost"
+                       Grid.Row="1">
+            <ContentControl x:Name="ContentControl"
+                            prism:RegionManager.RegionName="MainView" />
 
-            <!--#region 左侧信息栏-->
-            <StackPanel>
-                <Label Content="标题："
-                       Margin="10,5,0,0" />
-                <TextBox HorizontalAlignment="Left"
-                         Margin="10,5,0,0"
-                         Text="{Binding SelectedMusic.Title}" />
-                <Label Content="歌手："
-                       Margin="10,5,0,0" />
-                <TextBox HorizontalAlignment="Left"
-                         Margin="10,5,0,0"
-                         Text="{Binding SelectedMusic.Artist}" />
-                <Label Content="时长："
-                       Margin="10,5,0,0" />
-                <TextBox HorizontalAlignment="Left"
-                         Margin="10,5,0,0"
-                         Text="{Binding SelectedMusic.Duration}" />
-                <Label Content="专辑："
-                       Margin="10,5,0,0" />
-                <TextBox HorizontalAlignment="Left"
-                         Margin="10,5,0,0"
-                         Text="{Binding SelectedMusic.Album}" />
-                <Label Content="类型："
-                       Margin="10,5,0,0" />
-                <TextBox HorizontalAlignment="Left"
-                         Margin="10,5,0,0"
-                         Text="{Binding SelectedMusic.Type}" />
-                <Label Content="发行时间："
-                       Margin="10,5,0,0" />
-                <TextBox HorizontalAlignment="Left"
-                         Margin="10,5,0,0"
-                         Text="{Binding SelectedMusic.PublishTime}" />
-                <Label Content="歌词："
-                       Margin="10,5,0,0" />
-                <TextBox x:Name="lyricBox"
-                         HorizontalAlignment="Left"
-                         Margin="10,5,0,0"
-                         Height="250"
-                         Text="{Binding SelectedMusic.Lyric}" />
-                <Grid HorizontalAlignment="Center">
-                    <Border Width="180"
-                            Height="180"
-                            CornerRadius="8"
-                            Background="LightGray"
-                            Margin="10">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="20"
-                                              ShadowDepth="0"
-                                              Color="Black"
-                                              Opacity="0.4" />
-                        </Border.Effect>
-                        <Grid>
-                            <TextBlock FontFamily="{StaticResource IconFont}"
-                                       FontSize="80"
-                                       FontWeight="ExtraBold"
-                                       Text="&#xea86;"
-                                       Foreground="#33000000"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center" />
-
-                        </Grid>
-                    </Border>
-                    <Image x:Name="musicImg"
-                           Source="{Binding BitmapImage}"
-                           d:Source="C:\Users\Hinadesu\Desktop\projects\Mypple Music\Mypple Music\Resource\postShelter.png"
-                           Width="180"
-                           Height="180"
-                           Margin="10">
-
-                        <!--切掉图片多余的角-->
-
-                        <Image.OpacityMask>
-                            <VisualBrush>
-                                <VisualBrush.Visual>
-                                    <Border Width="{Binding RelativeSource={RelativeSource AncestorType=Image}, Path=ActualWidth}"
-                                            Height="{Binding RelativeSource={RelativeSource AncestorType=Image}, Path=ActualHeight}"
-                                            CornerRadius="8"
-                                            Background="White" />
-                                </VisualBrush.Visual>
-                            </VisualBrush>
-                        </Image.OpacityMask>
-                    </Image>
-                    <Button Content="&#xe67e;"
-                            Style="{StaticResource CornerRadiusButton}"
-                            FontFamily="{StaticResource IconFont}"
-                            FontSize="28"
-                            FontWeight="Bold"
-                            Width="50"
-                            Height="50" />
-                </Grid>
-            </StackPanel>
-            <!--#endregion-->
-            <!--#region 右侧歌曲列表-->
-
-            <Grid Grid.Column="1"
-                        AllowDrop="True"
-                        Drop="StackPanel_Drop">
-                <md:Snackbar x:Name="Snackbar"
-                             MessageQueue="{md:MessageQueue}"
-                             Panel.ZIndex="1" />
-                <DataGrid x:Name="dateGrid"
-                          Grid.Row="1"
-                          AutoGenerateColumns="False"
-                          AlternationCount="2"
-                          SelectedItem="{Binding SelectedMusic}"
-                          ItemsSource="{Binding MusicList}"
-                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                          IsReadOnly="True"
-                          SelectionUnit="FullRow"
-                          GridLinesVisibility="None"
-                          RowStyle="{StaticResource DataGridRowStyle}"
-                          MinRowHeight="45"
-                          Height="{Binding RelativeSource={RelativeSource AncestorType=Grid},Path=ActualHeight}"
-                          CellStyle="{StaticResource DataGridCellStyle}"
-                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <d:DataGrid.Items>
-                        <model:Music Album="111"
-                                     Artist="111"
-                                     Duration="111"
-                                     Type="True"
-                                     PublishTime="11"
-                                     Title="222" />
-                        <model:Music Album="111"
-                                     Artist="111"
-                                     Duration="111"
-                                     Type="True"
-                                     PublishTime="11"
-                                     Title="222" />
-                        <model:Music Album="111"
-                                     Artist="111"
-                                     Duration="111"
-                                     Type="True"
-                                     PublishTime="11"
-                                     Title="222" />
-                        <model:Music Album="111"
-                                     Artist="111"
-                                     Duration="111"
-                                     Type="True"
-                                     PublishTime="11"
-                                     Title="222" />
-                    </d:DataGrid.Items>
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Header=""
-                                                Width="0.3*">
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="标题"
-                                            Width="2*"
-                                            Binding="{Binding Title}" />
-                        <DataGridTextColumn Header="时长"
-                                            Width="1*"
-                                            Binding="{Binding Duration}" />
-                        <DataGridTextColumn Header="歌手"
-                                            Width="1*"
-                                            Binding="{Binding Artist}" />
-                        <DataGridTextColumn Header="专辑"
-                                            Width="1*"
-                                            Binding="{Binding Album}" />
-                        <DataGridTextColumn Header="类型"
-                                            Width="1*"
-                                            Binding="{Binding Type}" />
-                        <DataGridTextColumn Header="发行时间"
-                                            Binding="{Binding PublishTime}"
-                                            Width="1*" />
-                        <DataGridTextColumn Header="歌词"
-                                            Binding="{Binding Lyric}"
-                                            Width="2*" />
-
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-            <DockPanel Grid.Column="1"
-                       Height="60"
-                       VerticalAlignment="Bottom"
-                       LastChildFill="False">
-                <Button Width="200"
-                        Margin="10"
-                        Content="清空所有歌曲"
-                        Command="{Binding ClearAllCommand}"/>
-                <Button Width="200"
-                        Margin="10"
-                        DockPanel.Dock="Right"
-                        md:ButtonProgressAssist.IsIndeterminate="True"
-                        md:ButtonProgressAssist.IsIndicatorVisible="{Binding IsUploading}"
-                        md:ButtonProgressAssist.Value="-1"
-                        Content="上传选中项"
-                        Command="{Binding UploadCommand}"
-                        CommandParameter="{Binding ElementName=dateGrid,Path=SelectedItems}"
-                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                        Style="{StaticResource MaterialDesignRaisedButton}" />
-                <Button Width="200"
-                        Margin="10"
-                        DockPanel.Dock="Right"
-                        md:ButtonProgressAssist.IsIndeterminate="True"
-                        md:ButtonProgressAssist.IsIndicatorVisible="{Binding IsUploadingAll}"
-                        md:ButtonProgressAssist.Value="-1"
-                        Content="全部上传"
-                        Command="{Binding UploadAllCommand}"
-                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                        Style="{StaticResource MaterialDesignRaisedButton}" />
-            </DockPanel>
-            <!--#endregion-->
-        </Grid>
+        </md:DialogHost>
+        <md:Snackbar x:Name="Snackbar"
+                     MessageQueue="{md:MessageQueue}"
+                     Panel.ZIndex="1"
+                     Grid.Row="1" />
     </Grid>
 </Window>

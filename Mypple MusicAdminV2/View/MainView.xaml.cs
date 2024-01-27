@@ -28,33 +28,6 @@ namespace Mypple_MusicAdminV2.View
             });
         }
 
-        private void StackPanel_Drop(object sender, DragEventArgs e)
-        {
-            // 获取拖入的文件路径
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-
-            //// 遍历每个文件
-            //foreach (string file in files)
-            //{
-            //    // 获取文件信息
-            //    FileInfo fileInfo = new FileInfo(file);
-
-            //    // 创建一个段落
-            //    Paragraph paragraph = new Paragraph();
-
-            //    // 添加文件名、大小、扩展名等信息到段落中
-            //    paragraph.Inlines.Add($"文件名：{fileInfo.Name}\n");
-            //    paragraph.Inlines.Add($"文件大小：{fileInfo.Length}字节\n");
-            //    paragraph.Inlines.Add($"文件扩展名：{fileInfo.Extension}\n");
-            //    paragraph.Inlines.Add($"文件创建时间：{fileInfo.CreationTime}\n");
-            //    paragraph.Inlines.Add($"文件修改时间：{fileInfo.LastWriteTime}\n");
-
-            //    // 添加段落到RichTextBox控件中
-            //    lyricBox.Text = paragraph.ToString();
-
-            //}
-            eventAggregator.GetEvent<FileCreatedEvent>().Publish(new FileCreatedModel(files));
-        }
+        
     }
 }

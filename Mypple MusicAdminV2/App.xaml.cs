@@ -1,10 +1,14 @@
 ﻿using DryIoc;
+using Mypple_Music.Extensions;
+using Mypple_Music.ViewModels.Dialogs;
+using Mypple_Music.Views.Dialogs;
 using Mypple_MusicAdminV2.Service;
 using Mypple_MusicAdminV2.View;
 using Mypple_MusicAdminV2.ViewModel;
 using Prism.DryIoc;
 using Prism.Ioc;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 
@@ -27,17 +31,35 @@ namespace Mypple_MusicAdminV2
             containerRegistry.GetContainer().Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
             containerRegistry.GetContainer().RegisterInstance(@"http://localhost", serviceKey: "webUrl");
 
+            containerRegistry.Register<IDialogHostService, DialogHostService>();
             containerRegistry.Register<UploaderService>();
             containerRegistry.Register<MusicAdminService>();
-            
+            containerRegistry.Register<UserManageService>();
+            containerRegistry.Register<AlbumAdminService>();
+            containerRegistry.Register<ArtistAdminService>();
 
             containerRegistry.RegisterForNavigation<MainView, MainViewModel>();
+            containerRegistry.RegisterForNavigation<MusicUploadView, MusicUploadViewModel>();
+            containerRegistry.RegisterForNavigation<MusicManageView, MusicManageViewModel>();
+            containerRegistry.RegisterForNavigation<UserManageView, UserManageViewModel>();
+            containerRegistry.RegisterForNavigation<QuestionView, QuestionViewModel>();
+            containerRegistry.RegisterForNavigation<AlbumManageView,AlbumManageViewModel>();
+            containerRegistry.RegisterForNavigation<ArtistManageView, ArtistManageViewModel>();
 
         }
 
         private void PrismApplication_Exit(object sender, ExitEventArgs e)
         {
-            File.Delete(@"/temp");
+            try
+            {
+               
+            }
+            catch (System.Exception ex)
+            {
+
+                Debug.WriteLine(ex);
+            }
+
         }
     }
 }

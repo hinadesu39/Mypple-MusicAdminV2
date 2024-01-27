@@ -5,6 +5,8 @@ namespace MusicAdminV2.Model
 {
     public class Music : BindableBase
     {
+        public Guid Id { get; set; }     
+
         /// <summary>
         /// 歌曲url
         /// </summary>
