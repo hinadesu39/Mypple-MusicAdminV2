@@ -1,9 +1,5 @@
-﻿using MusicAdminV2.Model;
-using Mypple_MusicAdminV2.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Mypple_MusicAdminV2.Model;
+using Mypple_MusicAdminV2.Model.Request;
 using System.Threading.Tasks;
 
 namespace Mypple_MusicAdminV2.Service

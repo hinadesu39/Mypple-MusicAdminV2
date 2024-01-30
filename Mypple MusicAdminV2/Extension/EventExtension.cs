@@ -28,7 +28,7 @@ namespace Mypple_MusicAdminV2.Extension
             DialogParameters param = new DialogParameters();
             param.Add("Title", title);
             param.Add("Content", content);
-            var dialogResult = await dialogHost.ShowDialog("QuestionView", param);
+            var dialogResult = await dialogHost.ShowDialogAsync("QuestionView", param);
             return dialogResult;
         }
 

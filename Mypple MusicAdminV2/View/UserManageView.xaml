@@ -9,6 +9,7 @@
              xmlns:converter="clr-namespace:Mypple_MusicAdminV2.Converter"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="1200">
@@ -19,138 +20,172 @@
         <local:UserManageView />
     </d:UserControl.DataContext>
     <Grid>
-        <DataGrid MinRowHeight="60"
-                  CanUserAddRows="False"
-                  AutoGenerateColumns="False"
-                  AlternationCount="2"
-                  ItemsSource="{Binding Users}"
-                  SelectionUnit="FullRow"
-                  GridLinesVisibility="None"
-                  ScrollViewer.CanContentScroll="False"
-                  RowStyle="{StaticResource DataGridRowStyle}"
-                  CellStyle="{StaticResource DataGridCellStyle}"
-                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                  ScrollViewer.VerticalScrollBarVisibility="Visible"
-                  EnableColumnVirtualization="True"
-                  EnableRowVirtualization="True">
+        <Grid>
+            <DataGrid MinRowHeight="60"
+                      CanUserAddRows="False"
+                      AutoGenerateColumns="False"
+                      AlternationCount="2"
+                      ItemsSource="{Binding Users}"
+                      SelectionUnit="FullRow"
+                      GridLinesVisibility="None"
+                      ScrollViewer.CanContentScroll="False"
+                      RowStyle="{StaticResource DataGridRowStyle}"
+                      CellStyle="{StaticResource DataGridCellStyle}"
+                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      EnableColumnVirtualization="True"
+                      EnableRowVirtualization="True">
 
-            <d:DataGrid.Items>
-                <model:SimpleUser UserName="111"
-                                  Gender="男"
-                                  BirthDay="2002-12-08"
-                                  PhoneNumber="12314345"
-                                  Email="312323@qq.com" />
-                <model:SimpleUser UserName="111"
-                                  Gender="男"
-                                  BirthDay="2002-12-08"
-                                  PhoneNumber="12314345"
-                                  Email="312323@qq.com" />
-                <model:SimpleUser UserName="111"
-                                  Gender="男"
-                                  BirthDay="2002-12-08"
-                                  PhoneNumber="12314345"
-                                  Email="312323@qq.com" />
-            </d:DataGrid.Items>
-            <DataGrid.Columns>
-                <DataGridTemplateColumn  Width="0.8*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Border Width="45"
-                                        Height="45"
-                                        CornerRadius="5"
-                                        Background="LightGray">
-                                    <TextBlock FontFamily="{StaticResource IconFont}"
-                                               FontSize="30"
-                                               FontWeight="ExtraBold"
-                                               Text="&#xe6a5;"
-                                               Foreground="#33000000"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
+                <d:DataGrid.Items>
+                    <model:SimpleUser UserName="111"
+                                      Gender="男"
+                                      BirthDay="2002-12-08"
+                                      PhoneNumber="12314345"
+                                      Email="312323@qq.com" />
+                    <model:SimpleUser UserName="111"
+                                      Gender="男"
+                                      BirthDay="2002-12-08"
+                                      PhoneNumber="12314345"
+                                      Email="312323@qq.com" />
+                    <model:SimpleUser UserName="111"
+                                      Gender="男"
+                                      BirthDay="2002-12-08"
+                                      PhoneNumber="12314345"
+                                      Email="312323@qq.com" />
+                </d:DataGrid.Items>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn  Width="0.8*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Border Width="45"
+                                            Height="45"
+                                            CornerRadius="5"
+                                            Background="LightGray">
+                                        <TextBlock FontFamily="{StaticResource IconFont}"
+                                                   FontSize="30"
+                                                   FontWeight="ExtraBold"
+                                                   Text="&#xe6a5;"
+                                                   Foreground="#33000000"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
 
-                                </Border>
-                                <Border CornerRadius="5"
-                                        Width="45"
-                                        Height="45">
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{Binding UserAvatar}"
-                                                    RenderOptions.BitmapScalingMode="LowQuality" />
-                                    </Border.Background>
-                                </Border>
-                                <Button Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                                        Style="{StaticResource MaterialDesignIconButton}"
-                                        Height="40"
-                                        Width="40"
-                                        Command="{Binding DataContext.ChangeAvatarCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
-                                        CommandParameter="{Binding}">
-                                    <materialDesign:PackIcon Kind="PhotoCamera" 
-                                                             Width="20"
-                                                             Height="20"/>
-                                </Button>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="用户名"
-                                    Width="2*"
-                                    Binding="{Binding UserName}" />
-                <DataGridTemplateColumn  Header="性别"
-                                         Width="1*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ComboBox Width="100"
-                                      SelectedIndex="{Binding Gender,Converter={StaticResource GenderToIndex}}">
-                                <ComboBoxItem Content="男" />
-                                <ComboBoxItem Content="女" />
-                                <ComboBoxItem Content="武装直升机" />
-                            </ComboBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="生日"
-                                        Width="2*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DatePicker SelectedDate="{Binding BirthDay}"
-                                        Width="120"
-                                        materialDesign:HintAssist.Hint="Pick Date"
-                                        materialDesign:TextFieldAssist.HasClearButton="True"
-                                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="邮箱"
-                                    Width="2*"
-                                    Binding="{Binding Email}" />
-                <DataGridTextColumn Header="电话号码"
-                                    Width="1.5*"
-                                    Binding="{Binding PhoneNumber}" />
-                <DataGridCheckBoxColumn Width="1*"
-                                        Header="管理员?"
-                                        Binding="{Binding IsAdmin}">
-                </DataGridCheckBoxColumn>
-                <DataGridTemplateColumn Header=""
-                                        Width="2*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="删除"
-                                        FontWeight="Bold"
-                                        Background="#f44336"
-                                        BorderBrush="#f44336"
-                                        Command="{Binding DataContext.DeleteCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
-                                        CommandParameter="{Binding}" />
-                                <Button Content="保存更改"
-                                        FontWeight="Bold"
-                                        Margin="20 0 0 0"
-                                        Command="{Binding DataContext.SaveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
-                                        CommandParameter="{Binding}" />
-                            </StackPanel>
+                                    </Border>
+                                    <Border CornerRadius="5"
+                                            Width="45"
+                                            Height="45">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{Binding UserAvatar}"
+                                                        RenderOptions.BitmapScalingMode="LowQuality" />
+                                        </Border.Background>
+                                    </Border>
+                                    <Button x:Name="btn"
+                                            Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            Height="40"
+                                            Width="40"
+                                            Visibility="Hidden"
+                                            Command="{Binding DataContext.ChangeAvatarCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}">
+                                        <materialDesign:PackIcon Kind="PhotoCamera"
+                                                                 Width="20"
+                                                                 Height="20" />
+                                    </Button>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseEnter">
+                                            <i:ChangePropertyAction PropertyName="Visibility"
+                                                                    Value="Visible"
+                                                                    TargetName="btn">
+                                            </i:ChangePropertyAction>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="MouseLeave">
+                                            <i:ChangePropertyAction PropertyName="Visibility"
+                                                                    Value="Hidden"
+                                                                    TargetName="btn">
+                                            </i:ChangePropertyAction>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="用户名"
+                                        Width="2*"
+                                        Binding="{Binding UserName}" />
+                    <DataGridTemplateColumn  Header="性别"
+                                             Width="1*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox Width="100"
+                                          SelectedIndex="{Binding Gender,Converter={StaticResource GenderToIndex}}">
+                                    <ComboBoxItem Content="男" />
+                                    <ComboBoxItem Content="女" />
+                                    <ComboBoxItem Content="武装直升机" />
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="生日"
+                                            Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding BirthDay}"
+                                            Width="120"
+                                            materialDesign:HintAssist.Hint="Pick Date"
+                                            materialDesign:TextFieldAssist.HasClearButton="True"
+                                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="邮箱"
+                                        Width="2*"
+                                        Binding="{Binding Email}" />
+                    <DataGridTextColumn Header="电话号码"
+                                        Width="1.5*"
+                                        Binding="{Binding PhoneNumber}" />
+                    <DataGridCheckBoxColumn Width="1*"
+                                            Header="管理员?"
+                                            Binding="{Binding IsAdmin}">
+                    </DataGridCheckBoxColumn>
+                    <DataGridTemplateColumn Header=""
+                                            Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="删除"
+                                            FontWeight="Bold"
+                                            Background="#f44336"
+                                            BorderBrush="#f44336"
+                                            Command="{Binding DataContext.DeleteCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Content="保存更改"
+                                            FontWeight="Bold"
+                                            Margin="20 0 0 0"
+                                            Command="{Binding DataContext.SaveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}" />
+                                </StackPanel>
 
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <DockPanel Height="60"
+                   VerticalAlignment="Bottom"
+                   LastChildFill="False">
+
+            <Button Width="200"
+                    Margin="10"
+                    DockPanel.Dock="Right"
+                    md:ButtonProgressAssist.IsIndeterminate="True"
+                    md:ButtonProgressAssist.IsIndicatorVisible="{Binding IsUploading}"
+                    md:ButtonProgressAssist.Value="-1"
+                    Content="上传选中项"
+                    Command="{Binding UploadCommand}"
+                    CommandParameter="{Binding ElementName=dateGrid,Path=SelectedItems}"
+                    Style="{StaticResource MaterialDesignRaisedButton}" />
+
+        </DockPanel>
     </Grid>
 </UserControl>

@@ -1,7 +1,7 @@
 ﻿using Prism.Mvvm;
 using System;
 
-namespace MusicAdminV2.Model
+namespace Mypple_MusicAdminV2.Model
 {
     public class Music : BindableBase
     {
@@ -96,6 +96,14 @@ namespace MusicAdminV2.Model
             get { return artist; }
             set { artist = value; RaisePropertyChanged(); }
         }
+
+        private Guid artistId;
+
+        public Guid ArtistId
+        {
+            get { return artistId; }
+            set { artistId = value; RaisePropertyChanged(); }
+        }
         /// <summary>
         /// 专辑
         /// </summary>
@@ -107,7 +115,13 @@ namespace MusicAdminV2.Model
             set { album = value; RaisePropertyChanged(); }
         }
 
+        private Guid albumId;
 
+        public Guid AlbumId
+        {
+            get { return albumId; }
+            set { albumId = value; RaisePropertyChanged(); }
+        }
         /// <summary>
         /// 类型
         /// </summary>

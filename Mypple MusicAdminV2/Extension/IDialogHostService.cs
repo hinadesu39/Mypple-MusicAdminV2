@@ -9,7 +9,7 @@ namespace Mypple_Music.Extensions
 {
     public interface IDialogHostService : IDialogService
     {
-        Task<IDialogResult> ShowDialog(string name, IDialogParameters parameters, string dialogHostName = "Root");
+        Task<IDialogResult> ShowDialogAsync(string name, IDialogParameters? parameters, string dialogHostName = "Root");
 
     }
 }

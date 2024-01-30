@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using Mypple_Music.Extensions;
 using Mypple_MusicAdminV2.Extension;
 using Mypple_MusicAdminV2.Model;
+using Mypple_MusicAdminV2.Model.Request;
 using Mypple_MusicAdminV2.Service;
 using Prism.Commands;
 using Prism.Events;
@@ -31,13 +32,15 @@ namespace Mypple_MusicAdminV2.ViewModel
 
         #region Property
 
-        public DelegateCommand<SimpleUser> DeleteCommand { get; set; }
+        public DelegateCommand<Artist> DeleteCommand { get; set; }
 
-        public DelegateCommand<SimpleUser> SaveCommand { get; set; }
+        public DelegateCommand<Artist> SaveCommand { get; set; }
 
-        public DelegateCommand<SimpleUser> ChangeAvatarCommand { get; set; }
+        public DelegateCommand<Artist> ChangeAvatarCommand { get; set; }
 
         public DelegateCommand RefrashCommand { get; set; }
+
+        public DelegateCommand AddCommand { get; set; }
 
         private ObservableCollection<Artist> artistList;
 
@@ -73,18 +76,25 @@ namespace Mypple_MusicAdminV2.ViewModel
             this.artistAdminService = artistAdminService;
             this.dialogHostService = dialogHostService;
             this.uploaderService = uploaderService;
-            DeleteCommand = new DelegateCommand<SimpleUser>(Delete);
-            SaveCommand = new DelegateCommand<SimpleUser>(Save);
-            ChangeAvatarCommand = new DelegateCommand<SimpleUser>(ChangeAvatar);
+            DeleteCommand = new DelegateCommand<Artist>(Delete);
+            SaveCommand = new DelegateCommand<Artist>(Save);
+            ChangeAvatarCommand = new DelegateCommand<Artist>(ChangeAvatar);
             RefrashCommand = new DelegateCommand(Init);
+            AddCommand = new DelegateCommand(Add);
             Init();
         }
+
 
         #endregion
 
         #region Command
 
-        private async void ChangeAvatar(SimpleUser simpleUser)
+        private void Add()
+        {
+            ArtistList.Add(new Artist() { Name = "none" });
+        }
+
+        private async void ChangeAvatar(Artist artist)
         {
             // 创建一个 OpenFileDialog 的实例
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -111,27 +121,58 @@ namespace Mypple_MusicAdminV2.ViewModel
             fileStream.Close();
             if (picExist.IsExists == false)
             {
-                simpleUser.UserAvatar = await uploaderService.UploadAsync(filePath);
+                artist.PicUrl = await uploaderService.UploadAsync(filePath);
             }
             else
             {
-                simpleUser.UserAvatar = picExist.Url;
+                artist.PicUrl = picExist.Url;
             }
         }
 
-        private async void Save(SimpleUser simpleUser)
+        private async void Save(Artist artist)
         {
+            if(artist.Name == "none" || artist.Name == string.Empty)
+            {
+                eventAggregator.SendMessage($"请补充信息");
+                return;
+            }
             var dialogRes = await dialogHostService.Question("温馨提示", $"确定要保存吗，该操作不可撤回!!");
             if (dialogRes.Result == ButtonResult.OK)
             {
-
+                string res;
+                if (Count == ArtistList.Count())
+                {
+                    //Save Artist
+                    res = await artistAdminService.UpdateAsync(new ArtistUpdateRequest(artist.Id, artist.PicUrl, artist.Name));
+                }
+                else
+                {
+                    //Add Artist
+                    res = await artistAdminService.AddAsync(new ArtistAddRequest(artist.PicUrl, artist.Name));
+                }
+                eventAggregator.SendMessage($"{res}");
             }
         }
 
-        private async void Delete(SimpleUser simpleUser)
+        private async void Delete(Artist artist)
         {
-            var dialogRes = await dialogHostService.Question("警告", $"将会永久删除该用户(真的很久!!)");
-
+            var dialogRes = await dialogHostService.Question("警告", $"将会永久删除该艺人(真的很久!!)");
+            if (dialogRes.Result == ButtonResult.OK)
+            {
+                if (artist.Id != Guid.Empty)
+                {
+                    var res = await artistAdminService.DeleteByIdAsync(artist.Id);
+                    if (res == "Ok")
+                    {
+                        ArtistList.Remove(artist);
+                    }
+                    eventAggregator.SendMessage($"{res}");
+                }
+                else
+                {
+                    ArtistList.Remove(artist);
+                }
+            }
         }
 
         public async void Init()
@@ -139,6 +180,7 @@ namespace Mypple_MusicAdminV2.ViewModel
             ArtistList = new ObservableCollection<Artist>(await artistAdminService.GetAllAsync());
             Count = ArtistList.Count();
         }
+
         #endregion
     }
 }

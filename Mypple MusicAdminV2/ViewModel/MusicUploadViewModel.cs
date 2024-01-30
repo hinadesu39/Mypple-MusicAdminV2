@@ -1,7 +1,7 @@
 ﻿using CommonHelper;
-using MusicAdminV2.Model;
 using Mypple_MusicAdminV2.Event;
 using Mypple_MusicAdminV2.Extension;
+using Mypple_MusicAdminV2.Model;
 using Mypple_MusicAdminV2.Service;
 using Prism.Commands;
 using Prism.Events;
@@ -9,13 +9,9 @@ using Prism.Ioc;
 using Prism.Mvvm;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace Mypple_MusicAdminV2.ViewModel
@@ -198,8 +194,6 @@ namespace Mypple_MusicAdminV2.ViewModel
                         new MusicAddRequest(
                             music.AudioUrl,
                             music.PicUrl,
-                            music.PicUrl,
-                            music.PicUrl,
                             music.Title,
                             music.Duration,
                             music.Artist,
@@ -209,8 +203,7 @@ namespace Mypple_MusicAdminV2.ViewModel
                             music.PublishTime
                         )
                     );
-                    Debug.WriteLine(res);
-                    eventAggregator.SendMessage($"{music.Title} 上传成功！");
+                    eventAggregator.SendMessage($"{res} 上传成功！");
                     IsUploadingAll = false;
                 }
                 catch (Exception ex)
@@ -266,8 +259,6 @@ namespace Mypple_MusicAdminV2.ViewModel
                     var res = await musicAdminService.AddAsync(
                         new MusicAddRequest(
                             music.AudioUrl,
-                            music.PicUrl,
-                            music.PicUrl,
                             music.PicUrl,
                             music.Title,
                             music.Duration,

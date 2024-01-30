@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:Mypple_MusicAdminV2.View"
              xmlns:model="clr-namespace:Mypple_MusicAdminV2.Model"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:extension="clr-namespace:Mypple_MusicAdminV2.Extension"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -23,7 +25,10 @@
                   CellStyle="{StaticResource DataGridCellStyle}"
                   VerticalAlignment="Top"
                   ScrollViewer.CanContentScroll="False"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  CanUserAddRows="False"
+                  EnableColumnVirtualization="True"
+                  EnableRowVirtualization="True">
             <d:DataGrid.Items>
                 <model:Artist Name="111"
                               PicUrl="C:\Users\Hinadesu\Desktop\projects\Mypple Music\Mypple Music\Resource\postShelter.png" />
@@ -62,6 +67,33 @@
                                                     RenderOptions.BitmapScalingMode="LowQuality" />
                                     </Border.Background>
                                 </Border>
+                                <Button x:Name="btn"
+                                        Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                                        Style="{StaticResource MaterialDesignIconButton}"
+                                        Height="40"
+                                        Width="40"
+                                        Margin="10,0,0,0"
+                                        Visibility="Hidden"
+                                        Command="{Binding DataContext.ChangeAvatarCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding}">
+                                    <md:PackIcon Kind="PhotoCamera"
+                                                 Width="20"
+                                                 Height="20" />
+                                </Button>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseEnter">
+                                        <i:ChangePropertyAction PropertyName="Visibility"
+                                                                Value="Visible"
+                                                                TargetName="btn">
+                                        </i:ChangePropertyAction>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="MouseLeave">
+                                        <i:ChangePropertyAction PropertyName="Visibility"
+                                                                Value="Hidden"
+                                                                TargetName="btn">
+                                        </i:ChangePropertyAction>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -69,21 +101,64 @@
 
                 <DataGridTextColumn Header="姓名"
                                     Width="2*"
-                                    Binding="{Binding Name}" />
+                                    Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTemplateColumn Header=""
+                                        Width="2*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="删除"
+                                        FontWeight="Bold"
+                                        Background="#f44336"
+                                        BorderBrush="#f44336"
+                                        Command="{Binding DataContext.DeleteCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding}" />
+                                <Button Content="保存更改"
+                                        FontWeight="Bold"
+                                        Margin="20 0 0 0"
+                                        Command="{Binding DataContext.SaveCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding}" />
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <DockPanel Height="60"
-                   VerticalAlignment="Bottom"
+
+        <DockPanel HorizontalAlignment="Right"
+                   Width="200"
                    LastChildFill="False">
             <Button Width="160"
                     Margin="10"
-                    DockPanel.Dock="Right"
-                    md:ButtonProgressAssist.IsIndeterminate="True"
-                    md:ButtonProgressAssist.IsIndicatorVisible="{Binding IsUploadingAll}"
-                    md:ButtonProgressAssist.Value="-1"
+                    DockPanel.Dock="Bottom"
                     Content="刷新"
                     Command="{Binding RefrashCommand}"
                     Style="{StaticResource MaterialDesignRaisedButton}" />
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                    DockPanel.Dock="Bottom"
+                    Margin="30 0 0 20"
+                    Command="{Binding AddCommand}">
+                <md:PackIcon Kind="Plus"
+                             Width="25"
+                             Height="25" />
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                    DockPanel.Dock="Bottom"
+                    Margin="30 0 0 20"
+                    extension:ScrollViewerExtension.ScrollDown="True">
+                <md:PackIcon Kind="ArrowDownBold"
+                             Width="25"
+                             Height="25" />
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                    DockPanel.Dock="Bottom"
+                    Margin="30 0 0 20"
+                    extension:ScrollViewerExtension.ScrollUp="True">
+                <md:PackIcon Kind="ArrowUpBold"
+                             Width="25"
+                             Height="25" />
+            </Button>
         </DockPanel>
     </Grid>
 </UserControl>

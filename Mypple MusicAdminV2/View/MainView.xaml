@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mypple_MusicAdminV2.ViewModel"
-        xmlns:model="clr-namespace:MusicAdminV2.Model"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"

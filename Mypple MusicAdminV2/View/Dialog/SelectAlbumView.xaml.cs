@@ -1,5 +1,4 @@
-﻿using Mypple_MusicAdminV2.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Mypple_MusicAdminV2.View
+namespace Mypple_MusicAdminV2.View.Dialog
 {
     /// <summary>
-    /// ArtistManageView.xaml 的交互逻辑
+    /// SelectAlbumView.xaml 的交互逻辑
     /// </summary>
-    public partial class ArtistManageView : UserControl
+    public partial class SelectAlbumView : UserControl
     {
-        public ArtistManageView()
+        public SelectAlbumView()
         {
             InitializeComponent();
         }

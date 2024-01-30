@@ -4,7 +4,9 @@ using Mypple_Music.ViewModels.Dialogs;
 using Mypple_Music.Views.Dialogs;
 using Mypple_MusicAdminV2.Service;
 using Mypple_MusicAdminV2.View;
+using Mypple_MusicAdminV2.View.Dialog;
 using Mypple_MusicAdminV2.ViewModel;
+using Mypple_MusicAdminV2.ViewModel.Dialog;
 using Prism.DryIoc;
 using Prism.Ioc;
 using System.Configuration;
@@ -45,6 +47,8 @@ namespace Mypple_MusicAdminV2
             containerRegistry.RegisterForNavigation<QuestionView, QuestionViewModel>();
             containerRegistry.RegisterForNavigation<AlbumManageView,AlbumManageViewModel>();
             containerRegistry.RegisterForNavigation<ArtistManageView, ArtistManageViewModel>();
+            containerRegistry.RegisterForNavigation<SelectAlbumView, SelectAlbumViewModel>();
+            containerRegistry.RegisterForNavigation<SelectArtistView, SelectArtistViewModel>();
 
         }
 

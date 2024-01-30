@@ -23,7 +23,7 @@ namespace Mypple_Music.Extensions
             this.extension = extension;
         }
 
-        public async Task<IDialogResult> ShowDialog(string name, IDialogParameters parameters, string dialogHostName = "Root")
+        public async Task<IDialogResult> ShowDialogAsync(string name, IDialogParameters? parameters, string dialogHostName = "Root")
         {
             if (parameters == null)
                 parameters = new DialogParameters();

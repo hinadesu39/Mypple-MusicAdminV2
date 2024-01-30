@@ -4,6 +4,7 @@
                         xmlns:local="clr-namespace:Mypple_MusicAdminV2"
                         xmlns:prism="http://prismlibrary.com/"
                         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+                        xmlns:extension="clr-namespace:Mypple_MusicAdminV2.Extension"
                         Exit="PrismApplication_Exit">
     <Application.Resources>
         <ResourceDictionary>
@@ -120,9 +121,10 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
+
             <!--文本输入框-->
-            <Style TargetType="TextBox">
+            <Style TargetType="TextBox"
+                   x:Key="TextBoxStyle">
                 <Setter Property="TextWrapping"
                         Value="Wrap" />
                 <Setter Property="Width"
@@ -226,119 +228,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <!-- DataGrid 行样式 -->
-            <Style x:Key="DataGridRowStyle"
-                   TargetType="DataGridRow">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type DataGridRow}">
-                            <Grid Margin="5,0,0,0">
-                                <Border x:Name="border"
-                                        Background="{TemplateBinding Background}"
-                                        BorderThickness="1"
-                                        BorderBrush="Transparent"
-                                        CornerRadius="3"
-                                        Margin="1">
-                                    <Border.OpacityMask>
-                                        <SolidColorBrush Color="Black"
-                                                         Opacity="0.3" />
-                                    </Border.OpacityMask>
-                                </Border>
-                                <Rectangle x:Name="borderHeader"
-                                           Width="4"
-                                           RadiusX="2"
-                                           RadiusY="2"
-                                           Height="30"
-                                           HorizontalAlignment="Left"
-                                           Margin="5,0,0,0">
-                                </Rectangle>
-
-                                <DataGridCellsPresenter Height="40" />
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <EventTrigger RoutedEvent="MouseDoubleClick">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="(DataGridRow.Background).(SolidColorBrush.Color)"
-                                                            To="#33000000"
-                                                            Duration="0:0:0.3" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <Trigger Property="IsSelected"
-                                         Value="True">
-                                    <Setter Property="Fill"
-                                            TargetName="borderHeader"
-                                            Value="{DynamicResource PrimaryHueLightBrush}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <!--  隔行换色  -->
-                    <Trigger Property="AlternationIndex"
-                             Value="0">
-                        <Setter Property="Background"
-                                Value="#11000000" />
-                    </Trigger>
-                    <Trigger Property="AlternationIndex"
-                             Value="1">
-                        <Setter Property="Background"
-                                Value="#44000000" />
-                    </Trigger>
-
-                    <Trigger Property="IsMouseOver"
-                             Value="True">
-                        <Setter Property="Background"
-                                Value="{DynamicResource PrimaryHueLightBrush}" />
-                    </Trigger>
-
-
-                </Style.Triggers>
-            </Style>
-            <!-- DataGrid 单元格样式 -->
-            <Style x:Key="DataGridCellStyle"
-                   TargetType="DataGridCell">
-                <Setter Property="VerticalAlignment"
-                        Value="Stretch" />
-                <Setter Property="FontSize"
-                        Value="13" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="DataGridCell">
-                            <Grid>
-                                <!--保证空白区域也可点击选中-->
-                                <TextBlock FontFamily="微软雅黑" />
-                                <ContentPresenter Margin="8,0,0,0"
-                                                  HorizontalAlignment="Left"
-                                                  VerticalAlignment="Center" />
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsSelected"
-                             Value="True">
-                        <!--<Setter Property="Background" Value="White"/>
-                <Setter Property="BorderThickness" Value="0"/>-->
-                        <Setter Property="Foreground"
-                                Value="#FF464646" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <!--DataGrid标题样式-->
-            <Style x:Key="DataGridColumnHeaderStyle"
-                   TargetType="DataGridColumnHeader"
-                   BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                <Setter Property="BorderThickness"
-                        Value="0,1,1,1" />
-                <Setter Property="BorderBrush"
-                        Value="#33000000" />
-                <Setter Property="MinHeight"
-                        Value="40" />
-            </Style>
-
+            <!--DataGrid样式-->
             <Style x:Key="MusicGrid"
                    TargetType="{x:Type DataGrid}">
                 <Setter Property="Background"
@@ -356,10 +246,10 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type DataGrid}">
-                            <ScrollViewer x:Name="DG_ScrollViewer"
+                            <extension:SmoothScrollViewer x:Name="DG_ScrollViewer"
                                                           Focusable="false">
-                                <ScrollViewer.Template>
-                                    <ControlTemplate TargetType="ScrollViewer">
+                                <extension:SmoothScrollViewer.Template>
+                                    <ControlTemplate TargetType="extension:SmoothScrollViewer">
                                         <Border BorderBrush="{TemplateBinding BorderBrush}"
                                                 BorderThickness="{TemplateBinding BorderThickness}"
                                                 SnapsToDevicePixels="True">
@@ -384,12 +274,21 @@
                                                            Value="{TemplateBinding VerticalOffset}"
                                                            Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                                            Grid.Row="1" />
+                                                <!--<ScrollBar x:Name="PART_HorizontalScrollBar"
+                                                           Maximum="{TemplateBinding ScrollableWidth}"
+                                                           Orientation="Horizontal"
+                                                           Style="{StaticResource ScrollBarStyle}"
+                                                           VerticalAlignment="Bottom"
+                                                           Value="{TemplateBinding HorizontalOffset}"
+                                                           ViewportSize="{TemplateBinding ViewportWidth}"
+                                                           Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                                           Grid.Row="1" />-->
                                             </Grid>
                                         </Border>
                                     </ControlTemplate>
-                                </ScrollViewer.Template>
+                                </extension:SmoothScrollViewer.Template>
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                            </ScrollViewer>
+                            </extension:SmoothScrollViewer>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -404,6 +303,137 @@
                     </MultiTrigger>
                 </Style.Triggers>
             </Style>
+            <!-- DataGrid 行样式 -->
+            <Style x:Key="DataGridRowStyle"
+                   TargetType="DataGridRow">
+                <Setter Property="Foreground"
+                        Value="{DynamicResource DefaultForgeground}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridRow}">
+                            <md:TransitioningContent OpeningEffect="{md:TransitionEffect Kind=SlideInFromBottom}">
+                                <Grid Margin="5,0,0,0">
+                                    <Border x:Name="border"
+                                            Background="{TemplateBinding Background}"
+                                            BorderThickness="1"
+                                            BorderBrush="Transparent"
+                                            CornerRadius="3"
+                                            Margin="1">
+                                    </Border>
+                                    <Rectangle x:Name="borderHeader"
+                                               Width="4"
+                                               RadiusX="2"
+                                               RadiusY="2"
+                                               Height="30"
+                                               HorizontalAlignment="Left"
+                                               Margin="5,0,0,0">
+                                    </Rectangle>
+                                    <DataGridCellsPresenter Height="40" />
+                                </Grid>
+                            </md:TransitioningContent>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected"
+                                         Value="True">
+                                    <Setter Property="Fill"
+                                            TargetName="borderHeader"
+                                            Value="{DynamicResource PrimaryHueLightBrush}" />
+                                    <Setter Property="Background"
+                                            TargetName="border"
+                                            Value="{DynamicResource PrimaryHueLightBrush}" />
+                                    <Setter Property="Opacity"
+                                            TargetName="border"
+                                            Value="0.3" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="Opacity"
+                                            TargetName="border"
+                                            Value="0.3" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <!--  隔行换色  -->
+                    <Trigger Property="AlternationIndex"
+                             Value="0">
+                        <Setter Property="Background"
+                                Value="#11000000" />
+                    </Trigger>
+                    <Trigger Property="AlternationIndex"
+                             Value="1">
+                        <Setter Property="Background"
+                                Value="#22000000" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!-- DataGrid 单元格样式 -->
+            <Style x:Key="DataGridCellStyle"
+                   TargetType="DataGridCell">
+                <Setter Property="VerticalAlignment"
+                        Value="Stretch" />
+                <Setter Property="FontSize"
+                        Value="13" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="DataGridCell">
+                            <Grid>
+                                <!--保证空白区域也可点击选中-->
+                                <TextBlock FontFamily="微软雅黑" />
+                                <ContentPresenter Margin="8,0,0,0"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--DataGrid标题样式-->
+            <Style x:Key="DataGridColumnHeaderStyle"
+                   TargetType="DataGridColumnHeader"
+                   BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                <Setter Property="BorderThickness"
+                        Value="0,0,0.5,0.5" />
+                <Setter Property="BorderBrush"
+                        Value="#616161" />
+                <Setter Property="MinHeight"
+                        Value="40" />
+            </Style>
+
+
+            <!--透明按钮样式-->
+            <Style x:Key="TransParentButton"
+                   TargetType="Button">
+                <Setter Property="Width"
+                        Value="100" />
+                <Setter Property="Height"
+                        Value="35" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Border x:Name="border"
+                                    CornerRadius="3">
+                                <Grid>
+                                    <TextBlock FontFamily="微软雅黑" />
+                                    <ContentPresenter Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter TargetName="border"
+                                            Property="Background"
+                                            Value="#33000000" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 

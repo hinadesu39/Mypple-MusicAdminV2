@@ -1,9 +1,9 @@
 ﻿using CommonHelper;
 using Microsoft.Win32;
-using MusicAdminV2.Model;
 using Mypple_Music.Extensions;
 using Mypple_MusicAdminV2.Extension;
 using Mypple_MusicAdminV2.Model;
+using Mypple_MusicAdminV2.Model.Request;
 using Mypple_MusicAdminV2.Service;
 using Prism.Commands;
 using Prism.Events;
@@ -16,10 +16,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TagLib.Id3v2;
 
 namespace Mypple_MusicAdminV2.ViewModel
 {
-    public class MusicManageViewModel:BindableBase
+    public class MusicManageViewModel : BindableBase
     {
         #region Field
 
@@ -32,13 +33,17 @@ namespace Mypple_MusicAdminV2.ViewModel
 
         #region Property
 
-        public DelegateCommand<SimpleUser> DeleteCommand { get; set; }
+        public DelegateCommand<Music> DeleteCommand { get; set; }
 
-        public DelegateCommand<SimpleUser> SaveCommand { get; set; }
+        public DelegateCommand<Music> SaveCommand { get; set; }
 
-        public DelegateCommand<SimpleUser> ChangeAvatarCommand { get; set; }
+        public DelegateCommand<Music> ChangeAvatarCommand { get; set; }
 
         public DelegateCommand RefrashCommand { get; set; }
+
+        public DelegateCommand<Music> SelectArtistCommand { get; set; }
+
+        public DelegateCommand<Music> SelectAlbumCommand { get; set; }
 
         private ObservableCollection<Music> musicList;
 
@@ -57,7 +62,11 @@ namespace Mypple_MusicAdminV2.ViewModel
         public int Count
         {
             get { return count; }
-            set { count = value; RaisePropertyChanged(); }
+            set
+            {
+                count = value;
+                RaisePropertyChanged();
+            }
         }
 
         #endregion
@@ -74,10 +83,12 @@ namespace Mypple_MusicAdminV2.ViewModel
             this.musicAdminService = musicAdminService;
             this.dialogHostService = dialogHostService;
             this.uploaderService = uploaderService;
-            DeleteCommand = new DelegateCommand<SimpleUser>(Delete);
-            SaveCommand = new DelegateCommand<SimpleUser>(Save);
-            ChangeAvatarCommand = new DelegateCommand<SimpleUser>(ChangeAvatar);
+            DeleteCommand = new DelegateCommand<Music>(Delete);
+            SaveCommand = new DelegateCommand<Music>(Save);
+            ChangeAvatarCommand = new DelegateCommand<Music>(ChangeAvatar);
             RefrashCommand = new DelegateCommand(Init);
+            SelectArtistCommand = new DelegateCommand<Music>(SelectArtist);
+            SelectAlbumCommand = new DelegateCommand<Music>(SelectAlbum);
             Init();
         }
 
@@ -85,7 +96,29 @@ namespace Mypple_MusicAdminV2.ViewModel
 
         #region Command
 
-        private async void ChangeAvatar(SimpleUser simpleUser)
+        private async void SelectAlbum(Music music)
+        {
+            var dialogRes = await dialogHostService.ShowDialogAsync("SelectArtistView", null);
+            if (dialogRes.Result == ButtonResult.OK && dialogRes.Parameters.ContainsKey("Album"))
+            {
+                var album = dialogRes.Parameters.GetValue<Album>("Album");
+                music.AlbumId = album.Id;
+                music.Album = album.Title;
+            }
+        }
+
+        private async void SelectArtist(Music music)
+        {
+            var dialogRes = await dialogHostService.ShowDialogAsync("SelectArtistView", null);
+            if (dialogRes.Result == ButtonResult.OK && dialogRes.Parameters.ContainsKey("Artist"))
+            {
+                var artist = dialogRes.Parameters.GetValue<Artist>("Artist");
+                music.Artist = artist.Name;
+                music.ArtistId = artist.Id;
+            }
+        }
+
+        private async void ChangeAvatar(Music music)
         {
             // 创建一个 OpenFileDialog 的实例
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -112,27 +145,61 @@ namespace Mypple_MusicAdminV2.ViewModel
             fileStream.Close();
             if (picExist.IsExists == false)
             {
-                simpleUser.UserAvatar = await uploaderService.UploadAsync(filePath);
+                music.PicUrl = await uploaderService.UploadAsync(filePath);
             }
             else
             {
-                simpleUser.UserAvatar = picExist.Url;
+                music.PicUrl = picExist.Url;
             }
         }
 
-        private async void Save(SimpleUser simpleUser)
+        private async void Save(Music music)
         {
+            if (
+                music.Title == string.Empty
+                || music.Album == string.Empty
+                || music.Artist == string.Empty
+                || music.PublishTime == 0
+            )
+            {
+                eventAggregator.SendMessage($"请补充信息");
+                return;
+            }
+
             var dialogRes = await dialogHostService.Question("温馨提示", $"确定要保存吗，该操作不可撤回!!");
             if (dialogRes.Result == ButtonResult.OK)
             {
-                
+                //Save Album
+                var res = await musicAdminService.UpdateAsync(
+                    new MusicUpdateRequest(
+                        music.Id,
+                        music.AudioUrl,
+                        music.PicUrl,
+                        music.Title,
+                        music.ArtistId,
+                        music.Artist,
+                        music.AlbumId,
+                        music.Album,
+                        music.Type,
+                        music.Lyric,
+                        music.PublishTime
+                    )
+                );
             }
         }
 
-        private async void Delete(SimpleUser simpleUser)
+        private async void Delete(Music music)
         {
-            var dialogRes = await dialogHostService.Question("警告", $"将会永久删除该用户(真的很久!!)");
-            
+            var dialogRes = await dialogHostService.Question("警告", $"将会永久删除该歌曲(真的很久!!)");
+            if (dialogRes.Result == ButtonResult.OK)
+            {
+                var res = await musicAdminService.DeleteByIdAsync(music.Id);
+                if (res == "Ok")
+                {
+                    MusicList.Remove(music);
+                }
+                eventAggregator.SendMessage($"{res}");
+            }
         }
 
         public async void Init()
