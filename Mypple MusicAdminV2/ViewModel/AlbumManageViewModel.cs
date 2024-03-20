@@ -147,7 +147,7 @@ namespace Mypple_MusicAdminV2.ViewModel
 
         private async void Save(Album album)
         {
-            if(album.Title == "none" || album.Title == string.Empty || album.Artist == null || album.PublishTime == 0)
+            if (album.Title == "none" || album.Title == string.Empty || album.Artist == null || album.PublishTime == 0)
             {
                 eventAggregator.SendMessage($"请补充信息");
                 return;
@@ -212,8 +212,13 @@ namespace Mypple_MusicAdminV2.ViewModel
 
         public async void Init()
         {
-            AlbumList = new ObservableCollection<Album>(await albumAdminService.GetAllAsync());
-            Count = AlbumList.Count();
+            var albums = await albumAdminService.GetAllAsync();
+            if (albums != null)
+            {
+                AlbumList = new ObservableCollection<Album>(albums);
+                Count = AlbumList.Count();
+            }
+
         }
         #endregion
     }

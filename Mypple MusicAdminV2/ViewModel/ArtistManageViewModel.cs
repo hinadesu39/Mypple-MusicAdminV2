@@ -59,7 +59,11 @@ namespace Mypple_MusicAdminV2.ViewModel
         public int Count
         {
             get { return count; }
-            set { count = value; RaisePropertyChanged(); }
+            set
+            {
+                count = value;
+                RaisePropertyChanged();
+            }
         }
 
         #endregion
@@ -83,7 +87,6 @@ namespace Mypple_MusicAdminV2.ViewModel
             AddCommand = new DelegateCommand(Add);
             Init();
         }
-
 
         #endregion
 
@@ -131,7 +134,7 @@ namespace Mypple_MusicAdminV2.ViewModel
 
         private async void Save(Artist artist)
         {
-            if(artist.Name == "none" || artist.Name == string.Empty)
+            if (artist.Name == "none" || artist.Name == string.Empty)
             {
                 eventAggregator.SendMessage($"请补充信息");
                 return;
@@ -143,12 +146,16 @@ namespace Mypple_MusicAdminV2.ViewModel
                 if (Count == ArtistList.Count())
                 {
                     //Save Artist
-                    res = await artistAdminService.UpdateAsync(new ArtistUpdateRequest(artist.Id, artist.PicUrl, artist.Name));
+                    res = await artistAdminService.UpdateAsync(
+                        new ArtistUpdateRequest(artist.Id, artist.PicUrl, artist.Name)
+                    );
                 }
                 else
                 {
                     //Add Artist
-                    res = await artistAdminService.AddAsync(new ArtistAddRequest(artist.PicUrl, artist.Name));
+                    res = await artistAdminService.AddAsync(
+                        new ArtistAddRequest(artist.PicUrl, artist.Name)
+                    );
                 }
                 eventAggregator.SendMessage($"{res}");
             }
@@ -177,11 +184,14 @@ namespace Mypple_MusicAdminV2.ViewModel
 
         public async void Init()
         {
-            ArtistList = new ObservableCollection<Artist>(await artistAdminService.GetAllAsync());
-            Count = ArtistList.Count();
+            var artists = await artistAdminService.GetAllAsync();
+            if (artists != null)
+            {
+                ArtistList = new ObservableCollection<Artist>(artists);
+                Count = ArtistList.Count();
+            }
         }
 
         #endregion
     }
 }
-

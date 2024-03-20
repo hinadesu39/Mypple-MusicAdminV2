@@ -135,7 +135,9 @@ namespace Mypple_MusicAdminV2.ViewModel
 
         public async Task FindAllUser()
         {
-            Users = new ObservableCollection<SimpleUser>(await userManageService.FindAllUsers());
+            var users = await userManageService.FindAllUsers();
+            if (users != null)
+                Users = new ObservableCollection<SimpleUser>(users);
         }
         #endregion
     }

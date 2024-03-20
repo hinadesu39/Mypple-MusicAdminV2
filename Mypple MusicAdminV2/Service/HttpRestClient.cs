@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
 using RestSharp;
+using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mypple_MusicAdminV2.Service
@@ -12,11 +9,13 @@ namespace Mypple_MusicAdminV2.Service
     public class HttpRestClient
     {
         private readonly string apiUrl;
+        private readonly ILogger logger;
         protected readonly RestClient client;
 
-        public HttpRestClient(string apiUrl)
+        public HttpRestClient(string apiUrl, ILogger logger)
         {
             this.apiUrl = apiUrl;
+            this.logger = logger;
             client = new RestClient(apiUrl);
         }
 
@@ -30,9 +29,16 @@ namespace Mypple_MusicAdminV2.Service
                 request.AddFile("File", baseRequest.Parameter.ToString());
             }
 
-            RestResponse response = await client.ExecuteAsync(request);
-
-            return JsonConvert.DeserializeObject<Uri>(response.Content);
+            try
+            {
+                RestResponse response = await client.ExecuteAsync(request);
+                return JsonConvert.DeserializeObject<Uri>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex.Message);
+                return null;
+            }
         }
 
         public async Task<T> ExecuteAsync<T>(BaseRequest baseRequest)
@@ -46,8 +52,17 @@ namespace Mypple_MusicAdminV2.Service
                 string body = JsonConvert.SerializeObject(baseRequest.Parameter);
                 request.AddStringBody(body, ContentType.Json);
             }
-            RestResponse response = await client.ExecuteAsync(request);
-            return JsonConvert.DeserializeObject<T>(response.Content);
+
+            try
+            {
+                RestResponse response = await client.ExecuteAsync(request);
+                return JsonConvert.DeserializeObject<T>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex.Message);
+                return default(T);
+            }
         }
     }
 }

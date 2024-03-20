@@ -9,6 +9,7 @@ using Mypple_MusicAdminV2.ViewModel;
 using Mypple_MusicAdminV2.ViewModel.Dialog;
 using Prism.DryIoc;
 using Prism.Ioc;
+using Serilog;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -30,6 +31,13 @@ namespace Mypple_MusicAdminV2
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+
+            var log = new LoggerConfiguration().WriteTo
+                            .File("log/Mypple Music Admin.log")
+                            .CreateLogger();
+            containerRegistry.RegisterInstance<ILogger>(log);
+            log.Information("Log_Loaded");
+
             containerRegistry.GetContainer().Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
             containerRegistry.GetContainer().RegisterInstance(@"http://localhost", serviceKey: "webUrl");
 

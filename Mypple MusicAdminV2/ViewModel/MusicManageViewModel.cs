@@ -204,8 +204,13 @@ namespace Mypple_MusicAdminV2.ViewModel
 
         public async void Init()
         {
-            MusicList = new ObservableCollection<Music>(await musicAdminService.GetAllAsync());
-            Count = MusicList.Count();
+            var musics = await musicAdminService.GetAllAsync();
+            if (musics != null)
+            {
+                MusicList = new ObservableCollection<Music>(await musicAdminService.GetAllAsync());
+                Count = MusicList.Count();
+            }
+
         }
         #endregion
     }
