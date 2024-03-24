@@ -33,8 +33,7 @@
                       CellStyle="{StaticResource DataGridCellStyle}"
                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      EnableColumnVirtualization="True"
-                      EnableRowVirtualization="True">
+                      extension:ScrollViewerExtension.IsEnabled="True">
 
                 <d:DataGrid.Items>
                     <model:SimpleUser UserName="111"
@@ -71,14 +70,16 @@
                                                    VerticalAlignment="Center" />
 
                                     </Border>
-                                    <Border CornerRadius="5"
-                                            Width="45"
-                                            Height="45">
-                                        <Border.Background>
-                                            <ImageBrush ImageSource="{Binding UserAvatar}"
-                                                        RenderOptions.BitmapScalingMode="LowQuality" />
-                                        </Border.Background>
-                                    </Border>
+                                    <Image  Width="45"
+                                            Height="45"
+                                            RenderOptions.BitmapScalingMode="Fant"
+                                            Source="{Binding UserAvatar}">
+                                        <Image.Clip>
+                                            <RectangleGeometry Rect="0 0 45 45"
+                                                               RadiusX="5"
+                                                               RadiusY="5" />
+                                        </Image.Clip>
+                                    </Image>
                                     <Button x:Name="btn"
                                             Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
                                             Style="{StaticResource MaterialDesignIconButton}"
@@ -111,13 +112,13 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="用户名"
                                         Width="2*"
-                                        Binding="{Binding UserName}" />
+                                        Binding="{Binding UserName,UpdateSourceTrigger=PropertyChanged}" />
                     <DataGridTemplateColumn  Header="性别"
                                              Width="1*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox Width="100"
-                                          SelectedIndex="{Binding Gender,Converter={StaticResource GenderToIndex}}">
+                                          SelectedIndex="{Binding Gender,Converter={StaticResource GenderToIndex},UpdateSourceTrigger=PropertyChanged}">
                                     <ComboBoxItem Content="男" />
                                     <ComboBoxItem Content="女" />
                                     <ComboBoxItem Content="武装直升机" />
@@ -129,7 +130,7 @@
                                             Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <DatePicker SelectedDate="{Binding BirthDay}"
+                                <DatePicker SelectedDate="{Binding BirthDay,UpdateSourceTrigger=PropertyChanged}"
                                             Width="120"
                                             materialDesign:HintAssist.Hint="Pick Date"
                                             materialDesign:TextFieldAssist.HasClearButton="True"
@@ -139,13 +140,13 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="邮箱"
                                         Width="2*"
-                                        Binding="{Binding Email}" />
+                                        Binding="{Binding Email,UpdateSourceTrigger=PropertyChanged}" />
                     <DataGridTextColumn Header="电话号码"
                                         Width="1.5*"
-                                        Binding="{Binding PhoneNumber}" />
+                                        Binding="{Binding PhoneNumber,UpdateSourceTrigger=PropertyChanged}" />
                     <DataGridCheckBoxColumn Width="1*"
                                             Header="管理员?"
-                                            Binding="{Binding IsAdmin}">
+                                            Binding="{Binding IsAdmin,UpdateSourceTrigger=PropertyChanged}">
                     </DataGridCheckBoxColumn>
                     <DataGridTemplateColumn Header=""
                                             Width="2*">

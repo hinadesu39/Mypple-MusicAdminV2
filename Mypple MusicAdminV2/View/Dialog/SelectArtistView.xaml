@@ -58,8 +58,7 @@
                     ScrollViewer.CanContentScroll="False"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                     CanUserAddRows="False"
-                    EnableColumnVirtualization="True"
-                    EnableRowVirtualization="True">
+                    extension:ScrollViewerExtension.IsEnabled="True">
             <d:DataGrid.Items>
                 <model:Artist Name="111"
                               PicUrl="C:\Users\Hinadesu\Desktop\projects\Mypple Music\Mypple Music\Resource\postShelter.png" />
@@ -89,16 +88,17 @@
                                                VerticalAlignment="Center" />
 
                                 </Border>
-                                <Border CornerRadius="40"
-                                        Width="60"
+                                <Image  Width="60"
                                         Height="60"
+                                        RenderOptions.BitmapScalingMode="Fant"
+                                        Source="{Binding PicUrl}"
                                         Margin="10,0,0,0">
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{Binding PicUrl,IsAsync=True}"
-                                                    RenderOptions.BitmapScalingMode="LowQuality" />
-                                    </Border.Background>
-                                </Border>
-
+                                    <Image.Clip>
+                                        <EllipseGeometry RadiusX="30"
+                                                         RadiusY="30"
+                                                         Center="30 30" />
+                                    </Image.Clip>
+                                </Image>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

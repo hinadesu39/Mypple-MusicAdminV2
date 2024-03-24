@@ -320,7 +320,7 @@ namespace Mypple_MusicAdminV2.ViewModel
                         //将 bin 保存为一个文件上传完成后自动删除
                         //File.WriteAllBytes($@"temp/{musicToAdd.Title.Replace('/', '-')}.jpg", bin);
                         string absolute = Path.GetFullPath(
-                            $@"{musicToAdd.Title.Replace('/', '-').Replace('<', ' ').Replace('>', ' ').Replace(':', '：')}.jpg"
+                            $@"temp/{musicToAdd.Title.Replace('/', '-').Replace('<', ' ').Replace('>', ' ').Replace(':', '：')}.jpg"
                         );
 
                         if (!File.Exists(absolute))

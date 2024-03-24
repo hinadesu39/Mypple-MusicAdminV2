@@ -30,8 +30,7 @@
                   CellStyle="{StaticResource DataGridCellStyle}"
                   VerticalAlignment="Top"
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
-                  EnableColumnVirtualization="True"
-                  EnableRowVirtualization="True">
+                  extension:ScrollViewerExtension.IsEnabled="True">
             <d:DataGrid.Items>
                 <model:Music Album="111"
                              Artist="111"
@@ -76,14 +75,16 @@
                                                VerticalAlignment="Center" />
 
                                 </Border>
-                                <Border CornerRadius="5"
-                                        Width="45"
-                                        Height="45">
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{Binding PicUrl,IsAsync=True}"
-                                                    RenderOptions.BitmapScalingMode="LowQuality" />
-                                    </Border.Background>
-                                </Border>
+                                <Image  Width="45"
+                                        Height="45"
+                                        RenderOptions.BitmapScalingMode="Fant"
+                                        Source="{Binding PicUrl}">
+                                    <Image.Clip>
+                                        <RectangleGeometry Rect="0 0 45 45"
+                                                           RadiusX="5"
+                                                           RadiusY="5" />
+                                    </Image.Clip>
+                                </Image>
                                 <Button x:Name="btn"
                                         Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
                                         Style="{StaticResource MaterialDesignIconButton}"

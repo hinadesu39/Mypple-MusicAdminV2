@@ -56,7 +56,7 @@ namespace Mypple_MusicAdminV2.Service
             try
             {
                 RestResponse response = await client.ExecuteAsync(request);
-                return JsonConvert.DeserializeObject<T>(response.Content);
+              return JsonConvert.DeserializeObject<T>(response.Content);
             }
             catch (Exception ex)
             {

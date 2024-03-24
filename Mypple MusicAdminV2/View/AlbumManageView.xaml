@@ -27,8 +27,7 @@
                   ScrollViewer.CanContentScroll="False"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   CanUserAddRows="False"
-                  EnableColumnVirtualization="True"
-                  EnableRowVirtualization="True">
+                  extension:ScrollViewerExtension.IsEnabled="True">
             <d:DataGrid.Items>
                 <model:Album Artist="111"
                              PublishTime="2023"
@@ -70,15 +69,18 @@
                                                VerticalAlignment="Center" />
 
                                 </Border>
-                                <Border CornerRadius="5"
-                                        Width="60"
+
+                                <Image  Width="60"
                                         Height="60"
-                                        Margin="10,0,0,0">
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{Binding PicUrl,IsAsync=True}"
-                                                    RenderOptions.BitmapScalingMode="LowQuality" />
-                                    </Border.Background>
-                                </Border>
+                                        Margin="10,0,0,0"
+                                        RenderOptions.BitmapScalingMode="Fant"
+                                        Source="{Binding PicUrl}">
+                                    <Image.Clip>
+                                        <RectangleGeometry Rect="0 0 60 60"
+                                                           RadiusX="5"
+                                                           RadiusY="5" />
+                                    </Image.Clip>
+                                </Image>
                                 <Button x:Name="btn"
                                         Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
                                         Style="{StaticResource MaterialDesignIconButton}"
@@ -120,7 +122,7 @@
                             <Button Content="{Binding Artist}"
                                     Style="{StaticResource TransParentButton}"
                                     Command="{Binding DataContext.SelectArtistCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"
-                                    CommandParameter="{Binding}"/>
+                                    CommandParameter="{Binding}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

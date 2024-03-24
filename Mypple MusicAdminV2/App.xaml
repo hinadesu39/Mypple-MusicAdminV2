@@ -246,10 +246,10 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type DataGrid}">
-                            <extension:SmoothScrollViewer x:Name="DG_ScrollViewer"
+                            <ScrollViewer x:Name="DG_ScrollViewer"
                                                           Focusable="false">
-                                <extension:SmoothScrollViewer.Template>
-                                    <ControlTemplate TargetType="extension:SmoothScrollViewer">
+                                <ScrollViewer.Template>
+                                    <ControlTemplate TargetType="ScrollViewer">
                                         <Border BorderBrush="{TemplateBinding BorderBrush}"
                                                 BorderThickness="{TemplateBinding BorderThickness}"
                                                 SnapsToDevicePixels="True">
@@ -286,9 +286,9 @@
                                             </Grid>
                                         </Border>
                                     </ControlTemplate>
-                                </extension:SmoothScrollViewer.Template>
+                                </ScrollViewer.Template>
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                            </extension:SmoothScrollViewer>
+                            </ScrollViewer>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -385,6 +385,13 @@
                                                   HorizontalAlignment="Left"
                                                   VerticalAlignment="Center" />
                             </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected"
+                                         Value="True">
+                                    <Setter Property="Foreground"
+                                            Value="Black" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

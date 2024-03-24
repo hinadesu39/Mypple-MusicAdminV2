@@ -10,6 +10,7 @@ using Mypple_MusicAdminV2.ViewModel.Dialog;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Serilog;
+using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -26,6 +27,12 @@ namespace Mypple_MusicAdminV2
         public static Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         protected override Window CreateShell()
         {
+            var tempPath = System.IO.Path.Combine(Environment.CurrentDirectory, "temp");
+            if (!Directory.Exists(tempPath))
+            {
+                Directory.CreateDirectory(tempPath);
+            }
+
             return Container.Resolve<MainView>();
         }
 

@@ -27,8 +27,7 @@
                   ScrollViewer.CanContentScroll="False"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   CanUserAddRows="False"
-                  EnableColumnVirtualization="True"
-                  EnableRowVirtualization="True">
+                  extension:ScrollViewerExtension.IsEnabled="True">
             <d:DataGrid.Items>
                 <model:Artist Name="111"
                               PicUrl="C:\Users\Hinadesu\Desktop\projects\Mypple Music\Mypple Music\Resource\postShelter.png" />
@@ -58,15 +57,17 @@
                                                VerticalAlignment="Center" />
 
                                 </Border>
-                                <Border CornerRadius="40"
-                                        Width="80"
+                                <Image  Width="80"
                                         Height="80"
-                                        Margin="10,0,0,0">
-                                    <Border.Background>
-                                        <ImageBrush ImageSource="{Binding PicUrl,IsAsync=True}"
-                                                    RenderOptions.BitmapScalingMode="LowQuality" />
-                                    </Border.Background>
-                                </Border>
+                                        Margin="10,0,0,0"
+                                        RenderOptions.BitmapScalingMode="Fant"
+                                        Source="{Binding PicUrl}">
+                                    <Image.Clip>
+                                        <EllipseGeometry RadiusX="40"
+                                                         RadiusY="40"
+                                                         Center="40 40" />
+                                    </Image.Clip>
+                                </Image>
                                 <Button x:Name="btn"
                                         Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
                                         Style="{StaticResource MaterialDesignIconButton}"
